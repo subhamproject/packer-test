@@ -4,7 +4,8 @@ pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
     disableConcurrentBuilds()
-   ansiColor('xterm')
+    ansiColor('xterm')
+    timestamps()
   }
   agent any
   stages {
