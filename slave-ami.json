@@ -1,7 +1,7 @@
 {
     "variables": {
       "region":"ap-southeast-1",
-      "description": ""
+      "description": "test ami"
     },
     "builders": [{
       "type": "amazon-ebs",
@@ -37,12 +37,12 @@
     "provisioners": [
 	 {
             "type": "file",
-            "source": "/tmp/script/userdata",
+            "source": "./script/userdata",
             "destination": "/tmp/"
         },
         {
             "type": "shell",
-            "script": "/tmp/script/config",
+            "script": "./script/config",
 	    "execute_command": "{{ .Vars }} sudo -E sh '{{ .Path }}'"
         }
       ]
