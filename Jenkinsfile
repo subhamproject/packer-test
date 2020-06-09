@@ -6,6 +6,9 @@ pipeline {
     disableConcurrentBuilds()
     ansiColor('xterm')
     timestamps()
+    timeout(time: 10) // would lead to a timeout of 10 minutes (MINUTES is default value)
+   // timeout(time: 10, unit: 'SECONDS') // a 10 seconds timeout
+   //  timeout(time: 1, unit: 'HOURS') 
   }
   agent any
   stages {
