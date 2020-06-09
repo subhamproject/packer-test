@@ -1,0 +1,34 @@
+#cloud-boothook
+#!/bin/bash
+
+#Creating mount point of 50GB,Please change /dev/xv** disk
+[ ! -d /jenkins ] && mkdir -p  /jenkins
+
+if [ -b /dev/xvdb ]
+then
+    echo "Creating filesystem on /jenkins"
+    mkfs.ext4 -m 3 -N 13107200 -L /jenkins /dev/xvdb
+    mount /dev/xvdb /jenkins
+    [ $? -eq 0 ] && echo "FS mounted" || { echo "FS was not mounted" ; exit 1 ; }
+else
+echo "disk /dev/xvdb not found"
+fi
+
+#Adding to fstab
+if [ -b /dev/xvdb ];then
+echo "/dev/xvdb  /jenkins  ext4  defaults  0  0" >> /etc/fstab
+fi
+
+#Adding Jenkins user in slave
+useradd -d /jenkins jenkins
+
+chown -R jenkins:jenkins /jenkins
+cp -a /home/ec2-user/.ssh /jenkins/
+chown -R jenkins:jenkins /jenkins/.ssh
+
+# Confuring aws region for jenkins users
+su - jenkins -c "aws configure set default.region ap-southeast-1"
+su - jenkins -c "cp -p /etc/skel/.bash* /jenkins/"
+
+#Adding Jenkins users to docker group to enable it run docker commands
+usermod -a -G docker jenkins

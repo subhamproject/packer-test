@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#Installing required packages(docker,java,git..)
+yum update -y
+yum install -y git docker python3 sysstat
+amazon-linux-extras install java-openjdk11 -y
+
+#Changing docker root dir in /etc/sysconfig/docker
+sed -i 's/^OPTIONS/#OPTIONS/g' /etc/sysconfig/docker
+echo "OPTIONS=\"--default-ulimit nofile=1024:4096 -g /jenkins/docker\"" >> /etc/sysconfig/docker
+rsync -aq /var/lib/docker /jenkins
+
+# Adding ec2-user to docker group
+usermod -aG docker ec2-user
+
+service docker start
+chkconfig docker on
+service sysstat start
+chkconfig sysstat on
+
+#Setting Java version to be used
+/usr/sbin/alternatives --set java /usr/lib/jvm/java-11-openjdk-11.0.7.10-4.amzn2.0.1.x86_64/bin/java
+yum install python-pip -y
+pip-3 install boto3 requests PyYAML dnspython
+
+# Installing docker compose
+curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# copying script
+[ -f /tmp/userdata ] && cp -r /tmp/userdata /var/lib/cloud/scripts/per-instance/.

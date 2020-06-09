@@ -1,0 +1,49 @@
+{
+    "variables": {
+      "region":"ap-southeast-1",
+      "description": ""
+    },
+    "builders": [{
+      "type": "amazon-ebs",
+      "ami_name": "golden-image-new-with-disk",
+      "region": "{{user `region`}}",
+       "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "amzn2-ami-hvm-2.0.*-x86_64-gp2",
+          "root-device-type": "ebs"
+        },
+        "owners": ["amazon"],
+        "most_recent": true
+      },
+      "instance_type": "t2.micro",
+      "communicator": "ssh",
+      "ami_description": "{{user `description`}}",
+      "ssh_username": "ec2-user",
+      "ami_block_device_mappings": [{
+        "device_name": "/dev/xvda",
+        "volume_size": 20,
+        "delete_on_termination": true,
+        "volume_type": "gp2"
+      },
+      {
+      "device_name": "/dev/xvdb",
+        "volume_size": 50,
+        "delete_on_termination": true,
+        "volume_type": "gp2"
+     }],
+      "run_tags":{"Name":"packer-ami-build-instance"}
+    }],
+    "provisioners": [
+	 {
+            "type": "file",
+            "source": "/tmp/script/userdata",
+            "destination": "/tmp/"
+        },
+        {
+            "type": "shell",
+            "script": "/tmp/script/config",
+	    "execute_command": "{{ .Vars }} sudo -E sh '{{ .Path }}'"
+        }
+      ]
+  }
