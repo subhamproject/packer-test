@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x 
+
 export PATH="$PATH:/usr/local/bin"
 export USERID=$(id -u)
 export GROUPID=$(id -g)
