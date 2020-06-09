@@ -8,7 +8,7 @@ pipeline {
   }
   agent any
   stages {
-    stage('Building Custom AMI) {
+    stage('Building Custom AMI') {
       steps {
         script {
           sh '''
