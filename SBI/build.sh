@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x 
-
 export PATH="$PATH:/usr/local/bin"
 export USERID=$(id -u)
 export GROUPID=$(id -g)
@@ -13,6 +11,6 @@ CONTAINER_NAME="tester-$(echo ${JOB_NAME} | tr '/ ' '._').${BRANCH_NAME}"
 CONTAINER_NAME="${CONTAINER_NAME}-${BUILD_ID}"
 
 docker-compose -f builder.yml run \
-      -w "$WORKSPACE" \
+      --rm -w "$WORKSPACE" \
       --name "$CONTAINER_NAME" \
-      slave build slave-ami.json
+      slave validate slave-ami.json
