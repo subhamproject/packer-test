@@ -13,4 +13,4 @@ CONTAINER_NAME="${CONTAINER_NAME}-${BUILD_ID}"
 docker-compose -f builder.yml run \
       --rm -w "$WORKSPACE" \
       --name "$CONTAINER_NAME" \
-      slave validate slave-ami.json
+      slave build slave-ami.json
