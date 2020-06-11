@@ -19,6 +19,6 @@ echo $DESCRIPTION
 docker-compose -f builder.yml run \
       --rm -w "$WORKSPACE" \
       --name "$CONTAINER_NAME" \
-      slave build -var 'region=$REGION' \
-      -var 'ami-name=$AMI_NAME' \
-      -var 'description=$DESCRIPTION' slave-ami.json
+      slave build -var region=$REGION \
+      -var ami-name=$AMI_NAME \
+      -var description="$DESCRIPTION" slave-ami.json
