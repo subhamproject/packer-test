@@ -9,3 +9,7 @@ services:
       - /etc/group:/etc/group:ro
       - "${JENKINS_HOME}:${JENKINS_HOME}:rw"
       - "${WORKSPACE}:${WORKSPACE}:rw"
+     environment:
+      REGION=$REGION
+      AMI_NAME=$AMI_NAME
+      DESCRIPTION=$DESCRIPTION
