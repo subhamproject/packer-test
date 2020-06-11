@@ -9,7 +9,6 @@ then
     echo "Creating filesystem on /jenkins"
     mkfs.ext4 -m 3 -N 13107200 -L /jenkins /dev/xvdb
     mount /dev/xvdb /jenkins
-    [ $? -eq 0 ] && echo "FS mounted" || { echo "FS was not mounted" ; exit 1 ; }
 else
 echo "disk /dev/xvdb not found"
 fi
@@ -32,3 +31,13 @@ su - jenkins -c "cp -p /etc/skel/.bash* /jenkins/"
 
 #Adding Jenkins users to docker group to enable it run docker commands
 usermod -a -G docker jenkins
+
+# Create swapfile
+fallocate -l 10G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+[ $? -eq 0 ] && echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+
+#docker builx plugins
+mkdir -p /jenkins/.docker/cli-plugins && \
+wget https://github.com/docker/buildx/releases/download/v0.4.1/buildx-v0.4.1.linux-amd64 -O - /jenkins/.docker/cli-plugins/docker-buildx && \
+chmod 755 /jenkins/.docker/cli-plugins/docker-buildx && \
+chown -R jenkins:jenkins /jenkins/.docker
