@@ -1,11 +1,12 @@
 {
     "variables": {
-      "region":"ap-southeast-1",
-      "description": "test ami"
+      "region":"",
+      "ami-name": "",
+      "description": ""
     },
     "builders": [{
       "type": "amazon-ebs",
-      "ami_name": "golden-image-new-with-disk",
+      "ami_name": "{{user `ami-name`}}",
       "region": "{{user `region`}}",
        "source_ami_filter": {
         "filters": {
