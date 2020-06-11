@@ -38,6 +38,6 @@ fallocate -l 10G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon 
 
 #docker builx plugins
 mkdir -p /jenkins/.docker/cli-plugins && \
-wget https://github.com/docker/buildx/releases/download/v0.4.1/buildx-v0.4.1.linux-amd64 -O - /jenkins/.docker/cli-plugins/docker-buildx && \
+wget -O - https://github.com/docker/buildx/releases/download/v0.4.1/buildx-v0.4.1.linux-amd64 > /jenkins/.docker/cli-plugins/docker-buildx && \
 chmod 755 /jenkins/.docker/cli-plugins/docker-buildx && \
 chown -R jenkins:jenkins /jenkins/.docker
