@@ -1,3 +1,5 @@
+#!groovy
+
 currentBuild.displayName = "Packer-Build # "+currentBuild.number
 
    def getDockerTag(){
@@ -30,4 +32,29 @@ pipeline {
       }
     }
    }
+  post
+    {
+        always {
+        script {
+        currentBuild.result = currentBuild.currentResult
+      }
+        }
+        success {
+            deleteDir()
+            mail to: 'subham.rhce@gmail.com',
+                subject: "Success: ${currentBuild.fullDisplayName}",
+                body: "Successfully built ${env.BUILD_URL}"
+        }
+        failure {
+            mail to: 'subham.rhce@gmail.com',
+                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+                body: "Something is wrong with ${env.BUILD_URL}; Please check the logs"
+        }
+        unstable {
+            mail to: 'subham.rhce@gmail.com.com',
+                subject: "Unstable Pipeline: ${currentBuild.fullDisplayName}",
+                body: "Build is not stable; Please check the logs ${env.BUILD_URL}"
+        }
+    }
+}
  }
