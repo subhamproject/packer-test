@@ -28,5 +28,8 @@ curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compo
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
+#Configuring cron to remove old build logs from workspace
+echo "0 5 * * * find /jenkins/workspace/ -maxdepth 1 -mtime +2|xargs rm -rf" |crontab -
+
 # copying script
 [ -f /tmp/userdata ] && cp -r /tmp/userdata /var/lib/cloud/scripts/per-instance/.
